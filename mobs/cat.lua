@@ -6,16 +6,17 @@ local random = math.random
 
 local vec_dist, vec_add, vec_sub = vector.distance, vector.add, vector.subtract
 
-local follow = {
-	"animalia:poultry_raw"
-}
-
-if minetest.registered_items["ethereal:fish_raw"] then
-	follow = {
-		"ethereal:fish_raw",
-		"animalia:poultry_raw"
-	}
-end
+local food = {}
+local liked_foods = {'animalia:beef_raw', 'animalia:mutton_raw', 'animalia:porkchop_raw', 'animalia:poultry_raw', 'animalia:rat_raw'}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		for i = 1, 5 do
+			if name:match(liked_foods[i]) then
+				table.insert(food, liked_foods[i])
+			end
+		end
+	end
+end)
 
 local function find_glass_vessel(self)
 	local pos = self.object:get_pos()
@@ -98,7 +99,7 @@ creatura.register_mob("animalia:cat", {
 		run = {range = {x = 100, y = 119}, speed = 40, frame_blend = 0.3, loop = true},
 		sit = {range = {x = 130, y = 139}, speed = 10, frame_blend = 0.3, loop = true},
 	},
-	follow = follow,
+	follow = food,
 	drops = {},
 
 	-- Animalia Props

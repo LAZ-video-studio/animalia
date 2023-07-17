@@ -3,6 +3,14 @@
 -----------
 
 local random = math.random
+local food = {}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		if name:match('farming:wheat') then
+			table.insert(food, name)
+		end
+	end
+end)
 
 local palette  = {
 	black = {"Black", "#000000b0"},
@@ -70,7 +78,7 @@ creatura.register_mob("animalia:sheep", {
 		run = {range = {x = 100, y = 119}, speed = 40, frame_blend = 0.3, loop = true},
 		eat = {range = {x = 130, y = 150}, speed = 20, frame_blend = 0.3, loop = false}
 	},
-	follow = animalia.food_wheat,
+	follow = food,
 	drops = {
 		{name = "animalia:mutton_raw", min = 1, max = 3, chance = 1},
 		minetest.get_modpath("wool") and {name = "wool:white", min = 1, max = 3, chance = 2} or nil

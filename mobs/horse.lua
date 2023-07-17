@@ -8,7 +8,7 @@ local follows = {}
 
 minetest.register_on_mods_loaded(function()
 	for name in pairs(minetest.registered_items) do
-		if (name:match(":wheat")
+		if (name:match("farming:wheat")
 		or minetest.get_item_group(name, "food_wheat") > 0)
 		and not name:find("seed") then
 			table.insert(follows, name)

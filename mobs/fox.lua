@@ -4,6 +4,18 @@
 
 local vec_dir, vec_dist = vector.direction, vector.distance
 local dir2yaw = minetest.dir_to_yaw
+local food = {}
+local liked_foods = {'animalia:beef_raw', 'animalia:mutton_raw', 'animalia:porkchop_raw', 'animalia:poultry_raw', 'animalia:rat_raw'}
+
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		for i = 1, 5 do
+			if name:match(liked_foods[i]) then
+				table.insert(food, liked_foods[i])
+			end
+		end
+	end
+end)
 
 local function get_food_pos(self)
 	local _, pos = animalia.get_dropped_food(self)
@@ -69,13 +81,7 @@ creatura.register_mob("animalia:fox", {
 		walk = {range = {x = 41, y = 59}, speed = 30, frame_blend = 0.3, loop = true},
 		run = {range = {x = 41, y = 59}, speed = 45, frame_blend = 0.3, loop = true},
 	},
-	follow = {
-		"animalia:rat_raw",
-		"animalia:mutton_raw",
-		"animalia:beef_raw",
-		"animalia:porkchop_raw",
-		"animalia:poultry_raw"
-	},
+	follow = food,
 
 	-- Animalia Props
 	skittish_wander = true,

@@ -2,6 +2,18 @@
 -- Pig --
 ---------
 
+local food = {}
+local liked_foods = {'farming:potato', 'farming:beetroot', 'farming:carrot'}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		for i = 1, 3 do
+			if name:match(liked_foods[i]) then
+				table.insert(food, liked_foods[i])
+			end
+		end
+	end
+end)
+
 creatura.register_mob("animalia:pig", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
@@ -56,7 +68,7 @@ creatura.register_mob("animalia:pig", {
 		walk = {range = {x = 70, y = 89}, speed = 30, frame_blend = 0.3, loop = true},
 		run = {range = {x = 100, y = 119}, speed = 40, frame_blend = 0.3, loop = true},
 	},
-	follow = animalia.food_crops,
+	follow = food,
 	drops = {
 		{name = "animalia:porkchop_raw", min = 1, max = 3, chance = 1}
 	},

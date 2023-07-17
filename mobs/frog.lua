@@ -7,6 +7,15 @@ local random = math.random
 local vec_add = vector.add
 local vec_dist = vector.distance
 local vec_sub = vector.subtract
+local food = {}
+
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		if name:match('animalia:rat_raw') then
+			table.insert(food, name)
+		end
+	end
+end)
 
 local function poison_effect(object)
 	object:punch(object, 1.0, {
@@ -374,9 +383,7 @@ creatura.register_mob("animalia:frog", {
 		height = 0.3
 	},
 	animations = {},
-	follow = {
-		"animalia:rat_raw"
-	},
+	follow = food,
 	drops = {},
 	fancy_collide = false,
 	bouyancy_multiplier = 0,

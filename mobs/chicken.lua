@@ -2,6 +2,18 @@
 -- Chicken --
 -------------
 
+food = {}
+liked_foods = {'farming:seed_wheat', 'farming:seed_oat', 'farming:seed_sunflower'}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		for i = 1, 3 do
+			if name:match(liked_foods[i]) then
+				table.insert(food, liked_foods[i])
+			end
+		end
+	end
+end)
+
 creatura.register_mob("animalia:chicken", {
 	-- Engine Props
 	visual_size = {x = 10, y = 10},
@@ -57,7 +69,7 @@ creatura.register_mob("animalia:chicken", {
 		eat = {range = {x = 61, y = 89}, speed = 45, frame_blend = 0.3, loop = true},
 		fall = {range = {x = 91, y = 99}, speed = 70, frame_blend = 0.3, loop = true}
 	},
-	follow = animalia.food_seeds,
+	follow = food,
 	drops = {
 		{name = "animalia:poultry_raw", min = 1, max = 3, chance = 1},
 		{name = "animalia:feather", min = 1, max = 3, chance = 2}

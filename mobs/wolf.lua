@@ -17,22 +17,17 @@ local function shared_owner(obj1, obj2)
 	return false
 end
 
-local follow = {
-	"animalia:mutton_raw",
-	"animalia:beef_raw",
-	"animalia:porkchop_raw",
-	"animalia:poultry_raw"
-}
-
-if minetest.registered_items["bonemeal:bone"] then
-	follow = {
-		"bonemeal:bone",
-		"animalia:beef_raw",
-		"animalia:porkchop_raw",
-		"animalia:mutton_raw",
-		"animalia:poultry_raw"
-	}
-end
+local food = {}
+local liked_foods = {'animalia:beef_raw', 'animalia:mutton_raw', 'animalia:porkchop_raw', 'animalia:poultry_raw', 'animalia:rat_raw'}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		for i = 1, 5 do
+			if name:match(liked_foods[i]) then
+				table.insert(food, liked_foods[i])
+			end
+		end
+	end
+end)
 
 local function is_value_in_table(tbl, val)
 	for _, v in pairs(tbl) do
@@ -73,7 +68,7 @@ creatura.register_mob("animalia:wolf", {
 		run = {range = {x = 100, y = 119}, speed = 40, frame_blend = 0.3, loop = true},
 		sit = {range = {x = 130, y = 139}, speed = 10, frame_blend = 0.3, loop = true},
 	},
-	follow = follow,
+	follow = food,
 
 	-- Animalia Props
 	skittish_wander = true,

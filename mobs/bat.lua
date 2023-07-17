@@ -3,6 +3,14 @@
 ---------
 
 local vec_dist = vector.distance
+local food = {}
+minetest.register_on_mods_loaded(function()
+	for name in pairs(minetest.registered_items) do
+		if name:match('farming:melon_slice') then
+			table.insert(food, name)
+		end
+	end
+end)
 
 local function get_home_pos(self)
 	local pos = self.object:get_pos()
@@ -68,6 +76,7 @@ creatura.register_mob("animalia:bat", {
 		cling = {range = {x = 110, y = 110}, speed = 1, frame_blend = 0, loop = false}
 	},
 	follow = {
+		food,
 		"butterflies:butterfly_red",
 		"butterflies:butterfly_white",
 		"butterflies:butterfly_violet"
