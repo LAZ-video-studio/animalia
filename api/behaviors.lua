@@ -523,7 +523,7 @@ function animalia.action_wander_walk(self, timer, pos2, speed, anim)
 	if not pos then return end
 	local goal
 	local steer_to
-	local width = ceil(self.width or 1) * 2
+	local width = ceil(self.width or 1) * random(2, 20)
 	local check_timer = 0.25
 	timer = timer or 2
 	pos2 = pos2 or {
@@ -535,15 +535,13 @@ function animalia.action_wander_walk(self, timer, pos2, speed, anim)
 		pos = _self.object:get_pos()
 		if not pos then return end
 		local dir = vec_dir(pos, pos2)
-		goal = goal or vector.add(pos, dir)
 
 		-- Tick down timers
 		timer = timer - _self.dtime
 		check_timer = (check_timer <= 0 and 0.25) or check_timer - _self.dtime
 
 		-- Calculate movement
-		steer_to = (check_timer > 0 and steer_to) or calc_steering_and_lift(_self, pos, goal, dir)
-		goal = vec_add(pos, vec_multi(steer_to, self.width + 1))
+		goal = vec_add(pos, dir)
 
 		-- Check if goal is safe
 		local safe = true
@@ -847,7 +845,6 @@ end)
 creatura.register_utility("animalia:wander", function(self)
 	local check_timer = (self.group_wander or self.skittish_wander) and 5
 	local idle_max = 2
-	local move_chance = 4
 	local center = self.object:get_pos()
 	if not center then return end
 	local function func(_self)
@@ -876,19 +873,13 @@ creatura.register_utility("animalia:wander", function(self)
 				end
 			end
 
-			-- Move back to center if straying too far
-			if not dir
-			and vec_dist(pos, center) > _self.tracking_range / 3 then
-				dir = vec_dir(pos, center)
-			end
-
 			-- Choose action
-			if random(move_chance) < 2 then
+			if random(1, 10) > 5 then
 				local speed, anim = 0.5, "walk"
 				if vec_dist(pos, center) > _self.tracking_range / 3 then
 					speed, anim = 0.75, "run"
 				end
-				animalia.action_wander_walk(_self, 3, dir and vec_add(pos, vec_multi(dir, 3)), speed, anim)
+				animalia.action_wander_walk(_self, 3, dir, speed, anim)
 			else
 				creatura.action_idle(_self, random(idle_max), "stand")
 			end
